@@ -79,21 +79,6 @@
 //#define NUM_ALERTS_TA 3
 
 // Structs Definitions----------------------------------------------------------
-struct Inputs {
-    char mode; 		//Automatic='A', Manual='M'
-    double lat;         // [deg]
-    double lon;         // [deg]
-    double alt;         // [ft]
-    int im;
-    int om;
-    int mm;
-    uint32_t CS;
-};
-
-struct socket {
-    int sd;
-    struct sockaddr_in addr;
-};
 
 typedef struct Coord {
     double lat;         // [deg]
@@ -125,15 +110,11 @@ typedef struct POS {
     double alt;
 } POS;
 
-// marker beacons
-
 
 // aircraft structure
 typedef struct AC {
-    char status[STATUS_SIZE];
     POS pos;
     MB mb;
-    struct timeval time_msg;
 } AC_t;
 
 // airport structire
