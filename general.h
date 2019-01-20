@@ -62,8 +62,8 @@
 #define CHECK_SUM 32
 
 //Communications constants
-#define B_PORT 8000
-#define B_ADDRESS "192.168.1.255"
+#define B_PORT 800
+#define B_ADDRESS "127.0.0.1"
 
 #define STATUS_SIZE 30
 

@@ -40,9 +40,10 @@ int initialize_listener(void)
 
 	// Binds the local server port
 	local_addr.sin_family = AF_INET;
-	local_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	local_addr.sin_port = htons(port);
-
+	local_addr.sin_addr.s_addr = inet_addr(B_ADDRESS);
+	local_addr.sin_port = htons(B_PORT);
+	memset(local_addr.sin_zero, '\0', sizeof local_addr.sin_zero); 
+	 
 	rc = bind (sd, (struct sockaddr *) &local_addr,sizeof(local_addr));
 	if(rc<0) {
 		printf("LISTENER: cannot bind port number \n");
@@ -55,10 +56,7 @@ int initialize_listener(void)
 }
 
 
-/*
-	Function: initialize_msg
-	Initializes a message by setting all parameters to 0 
-*/
+
 message initialize_msg(message msg)
 {
 	msg.APos.lat = 0;
