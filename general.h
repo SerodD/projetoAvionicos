@@ -46,24 +46,37 @@
 #include <g2_X11.h>
 #include <vlc/vlc.h>
 
-
 // Defines ---------------------------------------------------------------------
 #define PI 3.14159265358979323846
 
-//TCAS resolution values
-/*#define ALT_ERROR 20                    	//ft
-#define ROC_CLIMB2ROUTE 2000*0.3048/60    	//fpm->m/s
-#define ROC_DESCEND2ROUTE -2000*0.3048/60  	//fpm->m/s
-#define ROC_CLIMB 1500*0.3048/60          	//fpm->m/s
-#define ROC_DESCEND -1500*0.3048/60       	//fpm->m/s
-#define ROC_CLIMB_NOW 2500*0.3048/60       	//fpm->m/s
-#define ROC_DESCEND_NOW -2500*0.3048/60    	//fpm->m/s */
+// Airport Data
+#define RUNWAY_LENGTH 3805.1232
+#define ELEVATION 100.2792
+
+// ILS Data
+#define GLIDE_SLOPE_ANGLE 3
+#define LAT_GS 38.766598
+#define LON_GS -9.143808
+#define LAT_LOC 38.797061
+#define LON_LOC -9.127527
+
+#define LAT_GS_BASE 38.609772
+#define LON_GS_BASE -9.226533
+#define HEIGHT_GS_BASE 1070.87127232
+#define HEIGHT_GS_CONE 18494.6189837
+#define RADIUS_GS_CONE 1298.56670962
+
+#define LAT_LOC_BASE 38.408865
+#define LON_LOC_BASE -9.322040
+#define HEIGHT_LOC_BASE 8264.2184068
+#define HEIGHT_LOC_CONE 45596.5989646
+#define RADIUS_LOC_CONE 8039.91062598 
 
 #define CHECK_SUM 32
 
 //Communications constants
-#define B_PORT 8000
-#define B_ADDRESS "192.168.1.255"
+#define B_PORT 800
+#define B_ADDRESS "127.0.0.1"
 
 #define STATUS_SIZE 30
 
@@ -71,35 +84,22 @@
 #define TIMEOUT 10
 
 //G2 Window
-#define WINDOWX 910
-#define WINDOWY 520
-
-// Sound alerts
-//#define NUM_ALERTS_RA 5
-//#define NUM_ALERTS_TA 3
+#define WINDOWX 1000
+#define WINDOWY 550
 
 // Structs Definitions----------------------------------------------------------
-struct Inputs {
-    char mode; 		//Automatic='A', Manual='M'
-    double lat;         // [deg]
-    double lon;         // [deg]
-    double alt;         // [ft]
-    int im;
-    int om;
-    int mm;
-    uint32_t CS;
-};
-
-struct socket {
-    int sd;
-    struct sockaddr_in addr;
-};
 
 typedef struct Coord {
     double lat;         // [deg]
     double lon;         // [deg]
     double alt;         // [ft]
 } CoordAir;
+
+typedef struct CoordXYZ {
+    double x;         // [deg]
+    double y;         // [deg]
+    double z;         // [ft]
+} XYZ;
 
 typedef struct Marker_Beacons {
     int im;
@@ -125,22 +125,20 @@ typedef struct POS {
     double alt;
 } POS;
 
-// marker beacons
-
-
 // aircraft structure
-typedef struct AC {
-    char status[STATUS_SIZE];
+typedef struct Aircraft {
     POS pos;
     MB mb;
-    struct timeval time_msg;
-} AC_t;
+    struct timevalue time_msg;
+    char status[STATUS_SIZE];
+} AC;
 
-// airport structire
+// airport structure
 typedef struct Airport_pos {
-    POS inicial;
-    POS final;
-    POS point_intersection;
+    POS point_intersection_gs;
+    POS point_intersection_loc;
+    POS point_base_gs;
+    POS point_base_loc;
     double glidepath;           //[º]
 } Airport;
 
@@ -150,20 +148,19 @@ typedef struct ENU_pos{
     double u;
 } ENU;
 
+typedef struct ILS_STATUS {
+	MB mb;
+	double hor_dev;
+	double ver_dev;
+	int LOC_STATUS;
+	int GS_STATUS;
+} ILS;
+
 // Global variables-------------------------------------------------------------
 
 struct Inputs inputs;
 int port;
 char address[STATUS_SIZE];
-
-int allow_dynamics;/*, allow_tcas,  range_mode;*/
-int exiting, receiving, sending;
-/*int desired_ROC;
-double range; */
-
-// used to play alert sounds
-//int alert_TA, alert_RA, silent;
-
 
 // Functions--------------------------------------------------------------------
 
