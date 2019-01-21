@@ -61,7 +61,7 @@ message initialize_msg(message msg)
 {
 	msg.APos.lat = 0;
 	msg.APos.lon = 0;
-	msg.Apos.alt = 0;
+	msg.APos.alt = 0;
 	msg.mb.im = 0;
 	msg.mb.om = 0;
 	msg.mb.mm = 0;
@@ -77,7 +77,7 @@ message initialize_msg(message msg)
 void print_msg(message msg)
 {
 	printf("\n*-------Message-------*\n");
-	printf("AP: %f %f %f\n", msg.APos.lat, msg.APos.lon, msg.Apos.alt);
+	printf("AP: %f %f %f\n", msg.APos.lat, msg.APos.lon, msg.APos.alt);
 	printf("AV: %d %d %d\n", msg.mb.im, msg.mb.om, msg.mb.mm);
 	printf("\n");
 }
@@ -130,7 +130,7 @@ void *listener(void *vargp){
 			receiving = 1;
 			// Receives message
 			addr_size = sizeof(ILS_addr);
-			n = recvfrom(sd, msg, sizeof(message) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
+			n = recvfrom(sd, &msg, sizeof(message) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
 			printf("\nReceived %d bytes from %s\n", n, inet_ntoa(ILS_addr.sin_addr));
 			if(n<0) {
 				printf("LISTENER: cannot receive data \n");
@@ -141,7 +141,7 @@ void *listener(void *vargp){
 
 			// Stores the message data in the aircraft structure
 			aircraft = msg_to_ac(msg);
-			print_msg(message msg);
+			print_msg(msg);
 			receiving=0;
 		}
 
