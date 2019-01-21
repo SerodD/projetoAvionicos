@@ -38,7 +38,7 @@ void *sound(void *vargp)
     libvlc_media_t *m;
 
     char alert_sound[STATUS_SIZE] = "";
-    int mb = 0;
+    int mb;
 
     // run until program closed
     while (exiting == 0) {
@@ -49,37 +49,44 @@ void *sound(void *vargp)
         if (status.mb.im == 0 && status.mb.om == 0 && status.mb.mm == 0)
         	mb = 0; //alerts won't be played;
         else {
-            // MM on
-            if (status.mb.om == 1)
+            if (status.mb.om == 1){
                 strcpy(alert_sound, "Outer VHF Marker Beacon.wav");
+                mb = 1;
             // OM on
-            else if (status.mb.mm == 1)
+            }
+            else if (status.mb.mm == 1){
                 strcpy(alert_sound, "Middle VHF Marker Beacon.wav");
-            // IM on
-            else if (status.mb.im == 1)
+                mb = 1;
+            // MM on
+            }
+            else if (status.mb.im == 1){
                 strcpy(alert_sound, "Inner VHF Marker.wav");
+                mb = 1;
+                // IM on
+            }
         }
-
+        if(mb == 1){
         // create a file to play
-        m = libvlc_media_new_path(inst, alert_sound);
+            m = libvlc_media_new_path(inst, alert_sound);
 
-        // create a media play playing environment
-        mp = libvlc_media_player_new_from_media(m);
+            // create a media play playing environment
+            mp = libvlc_media_player_new_from_media(m);
 
-        // release the media now.
-        libvlc_media_release(m);
+            // release the media now.
+            libvlc_media_release(m);
 
-        // play the media_player
-        libvlc_media_player_play(mp);
+            // play the media_player
+            libvlc_media_player_play(mp);
 
-        // play for 3 seconds
-        sleep(5);
+            // play for 3 seconds
+            sleep(5);
 
-        // stop playing
-        libvlc_media_player_stop(mp);
+            // stop playing
+            libvlc_media_player_stop(mp);
 
-        libvlc_media_player_release(mp);
-        libvlc_release(inst);
+            libvlc_media_player_release(mp);
+            libvlc_release(inst);
+        }
     }
 
     return NULL;

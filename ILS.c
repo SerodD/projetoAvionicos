@@ -19,33 +19,6 @@
 
 #include "general.h"
 
-/*
-  Function: delay
-  Handles delay
-*/
-
-void delay(unsigned int milliseconds){
-
-    clock_t start = clock();
-
-    while((clock() - start) * 1000 / CLOCKS_PER_SEC < milliseconds);
-}
-
-/*
-  Function: deg2rad
-  Converts from degrees to radians 
-*/
-float deg2rad(int a)
-{
-	float b;
-	float c;
-
-	c=a;
-	b=c/180*PI;
-
-	return b;
-}
-
 double dot_product(double v[], double u[], int n)
 {
     double result = 0.0;
@@ -56,8 +29,8 @@ double dot_product(double v[], double u[], int n)
 
 double* subArray(double a[], double b[], int size) 
 { 
-        int i;
-	double c[];
+    int i;
+	double* c = (double *)malloc(size);
         for(i=0; i< size;i++) 
                 c[i]=a[i]-b[i]; 
 	return c;
@@ -71,12 +44,12 @@ double array_module(double* array, int size) {
 	return result;
 }
 
-double angle_btw2_vects(double a[], double b[], int size) {
+double angle_btw2_vects(double* a, double* b, int size) {
 
         double dot = dot_product(a, b, sizeof(a));    
         double lenSq1 = pow(array_module(a, sizeof(a)), 2);
         double lenSq2 = pow(array_module(b, sizeof(b)), 2);
-        double angle = acos(dot/sqrt(lenSq1 * lenSq2))
+        double angle = acos(dot/sqrt(lenSq1 * lenSq2));
         
         return angle;
 }
@@ -104,34 +77,26 @@ void airport_init(AIRPORT* info) {
         // Glide Slope Antenna Position
 	info->point_intersection_gs.lat = LAT_GS;
 	info->point_intersection_gs.lon = LON_GS;
-	info->point_intersection_gs.alt = AIRPORT_ELEVATION;
-	info->point_intersection_gs.x = llh2xyz(info->point_intersection_gs);
-	info->point_intersection_gs.y = llh2xyz(info->point_intersection_gs);
-	info->point_intersection_gs.z = llh2xyz(info->point_intersection_gs);
+	info->point_intersection_gs.alt = ELEVATION;
+	llh2xyz(info->point_intersection_gs);
 	
 	// Glide Slope Range Limit Position
 	info->point_base_gs.lat = LAT_GS;
 	info->point_base_gs.lon = LON_GS;
-	info->point_base_gs.alt = AIRPORT_ELEVATION;
-	info->point_base_gs.x = llh2xyz(info->point_base_gs);
-	info->point_base_gs.y = llh2xyz(info->point_base_gs);
-	info->point_base_gs.z = llh2xyz(info->point_base_gs);
+	info->point_base_gs.alt = ELEVATION;
+	llh2xyz(info->point_base_gs);
 	
         // Localizer Antenna Position
 	info->point_intersection_loc.lat = LAT_LOC;
 	info->point_intersection_loc.lon = LON_LOC;
-	info->point_intersection_loc.alt = AIRPORT_ELEVATION;
-	info->point_intersection_loc.x = llh2xyz(info->point_intersection_loc);
-	info->point_intersection_loc.y = llh2xyz(info->point_intersection_loc);
-	info->point_intersection_loc.z = llh2xyz(info->point_intersection_loc);
+	info->point_intersection_loc.alt = ELEVATION;
+	llh2xyz(info->point_intersection_loc);
 	
 	// Localizer Range Limit Position
 	info->point_base_loc.lat = LAT_LOC;
 	info->point_base_loc.lon = LON_LOC;
-	info->point_base_loc.alt = AIRPORT_ELEVATION;
-	info->point_base_loc.x = llh2xyz(info->point_base_loc);
-	info->point_base_loc.y = llh2xyz(info->point_base_loc);
-	info->point_base_loc.z = llh2xyz(info->point_base_loc);
+	info->point_base_loc.alt = ELEVATION;
+	llh2xyz(info->point_base_loc);
 
 	info->glidepath = GLIDE_SLOPE_ANGLE;
 }
@@ -194,18 +159,18 @@ the Localizar or the Glide Slope. A cone was considered.
 */
 int check_lobe(POS tip, POS base, POS aircraft, double height, double radius) {
 
-	double p_minus_x[] = [aircraft.x - tip.x, aircraft.y - tip.y, aircraft.z - tip.z];
+	double p_minus_x[] = {aircraft.x - tip.x, aircraft.y - tip.y, aircraft.z - tip.z};
 	double dir_module = sqrt(pow(base.x - tip.x, 2) + pow(base.y - tip.y, 2) + pow(base.z - tip.z, 2));
-	double dir[] = [(base.x - tip.x)/dir_module, (base.y - tip.y)/dir_module, (base.z - tip.z)/dir_module]; // normalized
-	double dir_times_cone_dist = [cone_dist *(base.x - tip.x), cone_dist *(base.y - tip.y), cone_dist *(base.z - tip.z)];
-	cone_dist = dot_product(p_minus_x, dir, sizeof(p_minus_x));
+	double dir[] = {(base.x - tip.x)/dir_module, (base.y - tip.y)/dir_module, (base.z - tip.z)/dir_module}; // normalized
+	double cone_dist = dot_product(p_minus_x, dir, sizeof(p_minus_x));
+	double dir_times_cone_dist[] = {cone_dist *(base.x - tip.x), cone_dist *(base.y - tip.y), cone_dist *(base.z - tip.z)};
 
 	if(cone_dist <= 0 || cone_dist >=height) {
 		return 0;
 	}
 
-	cone_radius = (cone_dist / height) * radius;
-	orth_distance = array_module(subArray(p_minus_x, dir_times_cone_dist), 3);
+	double cone_radius = (cone_dist / height) * radius;
+	double orth_distance = array_module(subArray(p_minus_x, dir_times_cone_dist, sizeof(p_minus_x)), 3);
 
 	if(orth_distance >= cone_radius) {
 		return 0;
@@ -226,6 +191,11 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils) {
 
          //double rny_centerline[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], [info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], 3);
 	
+	double north_2[] = {0, 1};
+	double norht_3[] = {0, 1, 0};
+	ENU ac_enu;
+	double* ac_enu_array = (double*)malloc(3);
+
 	if(info_ac.mb.im == 1) {
 		info_ils->mb.im = 1;
 	}
@@ -248,12 +218,15 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils) {
 	}
 	
 	// Check if aircraft is inside Localizer Lobe
-	if (check_lobe(info_apt.point_intersection_loc, info_apt.point_base_loc, info_ac.pos, LOC_CONE_HEIGHT, LOC_CONE_RADIUS) == 1) {
-	        
+	if (check_lobe(info_apt.point_intersection_loc, info_apt.point_base_loc, info_ac.pos, HEIGHT_LOC_CONE, RADIUS_LOC_CONE) == 1) {
 	        
 	        //double ac_loc[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], project_point_hor(info_ac, info_rny), 3);
-	             
-	        info_ils->hor_dev = RUNWAY_DIRECTION - angle_btw2_vects(xyz2enu(info_ac.pos, info_apt.point_intersection_loc), [0 1], 2);
+	        
+			ac_enu = xyz2enu(info_ac.pos, info_apt.point_intersection_loc);
+			ac_enu_array[0] = ac_enu.e, 
+			ac_enu_array[1] = ac_enu.n; 
+			ac_enu_array[2] = ac_enu.u;
+	        info_ils->hor_dev = RUNWAY_DIRECTION - angle_btw2_vects(ac_enu_array, north_2, 2);
 	        info_ils->LOC_STATUS = 1;
 	}
 	else {
@@ -262,11 +235,15 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils) {
 	}
 	
 	// Check if aircraft is inside Glide Slope Lobe
-        if (check_lobe(info_apt.point_intersection_gs, info_apt.point_base_gs, info_ac.pos, GS_CONE_HEIGHT, GS_CONE_RADIUS) == 1) {
+        if (check_lobe(info_apt.point_intersection_gs, info_apt.point_base_gs, info_ac.pos, HEIGHT_GS_CONE, RADIUS_GS_CONE) == 1) {
         
                 //double ac_gs[] = subArray([info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], project_point_ver(info_ac, info_rny), 3);
                 
-                info_ils->ver_dev = angle_btw2_vects(xyz2enu(info_ac.pos, info_apt.point_intersection_gs), [0 1 0], 3) - GS_ANGLE;
+                ac_enu = xyz2enu(info_ac.pos, info_apt.point_intersection_gs);
+                ac_enu_array[0] = ac_enu.e, 
+				ac_enu_array[1] = ac_enu.n; 
+				ac_enu_array[2] = ac_enu.u;
+                info_ils->ver_dev = angle_btw2_vects(ac_enu_array, norht_3, 3) - GLIDE_SLOPE_ANGLE;
                 info_ils->GS_STATUS = 1;
         }
 	else {

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------
 	Instituto Superior Técnico - 1st Semester 18/19
 
-	Integrated Avionic Systems
+	Integrated Avionics Systems
 
 
 	FILE coord.c
@@ -34,21 +34,20 @@ int main(int argc, char const *argv[])
 	signal(SIGINT, intHandler);
 	exiting = 0;
 
-	//Create alarm interruption
-	struct sigaction  sa;
-	sa.sa_handler=ALARMhandler;
-	sigaction(SIGALRM, &sa, NULL);
-
 	//Create threads to run different functions in parallel
 	pthread_t thread_listener, thread_sound;
 	pthread_create(&thread_listener, NULL, listener, NULL);
-	pthread_create(&thread_sound, NULL, sound, NULL);
+	//pthread_create(&thread_sound, NULL, sound, NULL);
 	
 	while(exiting == 0){
+	printf("lat: %lf long: %lf alt: %lf\n",aircraft.pos.lat, aircraft.pos.lon,aircraft.pos.alt);
+	printf("x: %lf y: %lf z: %lf\n",aircraft.pos.x, aircraft.pos.y, aircraft.pos.z);
+	printf("om: %d mm: %d im: %d\n",aircraft.mb.om,aircraft.mb.mm,aircraft.mb.im);
+
 	}
 
 	pthread_join(thread_listener, NULL);	
-	ppthread_join(thread_sound, NULL);
+	pthread_join(thread_sound, NULL);
 	printf("\nThank you for using our ILS.\n");
 
 	exit(0);

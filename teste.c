@@ -4,8 +4,7 @@
 
 
 int main(){
-  int clientSocket, portNum, nBytes;
-  char buffer[1024];
+  int clientSocket;
   struct sockaddr_in serverAddr;
   socklen_t addr_size;
 
@@ -22,19 +21,19 @@ int main(){
   addr_size = sizeof serverAddr;
 
 
-	message msg;
+	MSG msg;
 
 	/* escrever mensagem a enviar em baixo */
 
   msg.APos.lat = 1;
 	msg.APos.lon = 3;
-	msg.Apos.alt = 8;
+	msg.APos.alt = 8;
 	msg.mb.im = 1;
 	msg.mb.om = 1;
 	msg.mb.mm = 0;
   
   /*Send message to server*/
-  sendto(clientSocket,msg,sizeof(message),0,(struct sockaddr *)&serverAddr,addr_size);
+  sendto(clientSocket,&msg,sizeof(MSG),0,(struct sockaddr *)&serverAddr,addr_size);
 
   close(clientSocket);
 

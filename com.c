@@ -57,7 +57,7 @@ int initialize_listener(void)
 
 
 
-message initialize_msg(message msg)
+MSG initialize_msg(MSG msg)
 {
 	msg.APos.lat = 0;
 	msg.APos.lon = 0;
@@ -74,7 +74,7 @@ message initialize_msg(message msg)
 	Function: print_msg
 	Prints all of the parameters of a message 
 */
-void print_msg(message msg)
+void print_msg(MSG msg)
 {
 	printf("\n*-------Message-------*\n");
 	printf("AP: %f %f %f\n", msg.APos.lat, msg.APos.lon, msg.APos.alt);
@@ -86,7 +86,7 @@ void print_msg(message msg)
 	Function: msg_to_ac
 	Stores the data from the messages in the aircraft structure
 */
-AC msg_to_ac(message msg)
+AC msg_to_ac(MSG msg)
 {
 	AC ac;
 	ac.pos.lat=msg.APos.lat;
@@ -117,7 +117,7 @@ void *listener(void *vargp){
 	socklen_t  addr_size;
 
 	// Initialize message variable
-	message msg;
+	MSG msg;
 	msg = initialize_msg(msg);
 
 	// Control variable to guarantee that only one message is being received at a time
@@ -130,7 +130,7 @@ void *listener(void *vargp){
 			receiving = 1;
 			// Receives message
 			addr_size = sizeof(ILS_addr);
-			n = recvfrom(sd, &msg, sizeof(message) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
+			n = recvfrom(sd, &msg, sizeof(msg) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
 			printf("\nReceived %d bytes from %s\n", n, inet_ntoa(ILS_addr.sin_addr));
 			if(n<0) {
 				printf("LISTENER: cannot receive data \n");
@@ -142,7 +142,7 @@ void *listener(void *vargp){
 			// Stores the message data in the aircraft structure
 			aircraft = msg_to_ac(msg);
 			print_msg(msg);
-			receiving=0;
+			receiving = 0;
 		}
 
 

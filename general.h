@@ -76,7 +76,7 @@
 #define CHECK_SUM 32
 
 //Communications constants
-#define B_PORT 800
+#define B_PORT 8100
 #define B_ADDRESS "127.0.0.1"
 
 #define STATUS_SIZE 30
@@ -111,7 +111,7 @@ typedef struct Marker_Beacons {
 typedef struct Message {
     CoordAir APos;
     MB mb;
-} message;
+} MSG;
 
 // aircraft position
 typedef struct POS {
@@ -163,14 +163,19 @@ ILS status;
 
 // Functions--------------------------------------------------------------------
 
+// com.c
 void *listener(void *vargp);
-AC msg_to_ac(message msg);
-void print_msg(message msg);
-message initialize_msg(message msg);
+AC msg_to_ac(MSG msg);
+void print_msg(MSG msg);
+MSG initialize_msg(MSG msg);
 int initialize_listener(void);
+
+//coord.c
 POS xyz2llh(POS pos);
 POS llh2xyz(POS pos);
 ENU xyz2enu(POS pos_ac, POS pos_int);
+
+//graphics.c
 void delay(unsigned int milliseconds);
 double *get_x_pos_circle(double y, double x_cen, double y_cen, double radius);
 double *get_y_pos_circle(double x, double x_cen, double y_cen, double radius);
@@ -186,6 +191,19 @@ void mm_on(int* d);
 void mm_off(int* d);
 void im_on(int* d);
 void im_off(int* d);
+void update_devs(int *d, ILS status);
+
+// ILS.c
+double dot_product(double v[], double u[], int n);
+double* subArray(double a[], double b[], int size);
+double array_module(double* array, int size);
+double angle_btw2_vects(double* a, double* b, int size);
+void airport_init(AIRPORT* info);
+void aircraft_init_or_upd(MSG message, AC* aircraft);
+int check_lobe(POS tip, POS base, POS aircraft, double height, double radius);
+void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils);
+
+// sound.c
 void *sound(void *vargp);
 
 

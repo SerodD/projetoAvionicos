@@ -482,14 +482,3 @@ void update_devs(int *d, ILS status) {
 		g2_line(*d, x[0], -status.ver_dev + 275, x[1], -status.ver_dev + 275);
 	}
 }
-
-float deg2rad(int a)
-{
-	float b;
-	float c;
-
-	c=a;
-	b=c/180*PI;
-
-	return b;
-}	
