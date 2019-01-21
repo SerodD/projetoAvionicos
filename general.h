@@ -187,22 +187,7 @@ void mm_on(int* d);
 void mm_off(int* d);
 void im_on(int* d);
 void im_off(int* d);
-void update_devs(int *d, ILS status);
-float deg2rad(int a);
-void delay(unsigned int milliseconds);
-float deg2rad(int a);
-double dot_product(double v[], double u[], int n);
-double* subArray(double a[], double b[], int size);
-double array_module(double* array, int size);
-double angle_btw2_vects(double a[], double b[], int size);
-void airport_init(AIRPORT* info);
-void init_rny_planes(RNY_PLANES* planes);
-XYZ project_point_hor(AC info_ac, RNY_PLANES info_rny_planes);
-XYZ project_point_ver(AC info_ac, RNY_PLANES info_rny_planes);
-void aircraft_init_or_upd(MSG message, AC* aircraft);
-int check_lobe(POS tip, POS base, POS aircraft, double height, double radius);
-void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES info_rny);
-void *sound(void *vargp, ILS status);
+void *sound(void *vargp);
 
 
 #endif //SAI_GENERAL_H
