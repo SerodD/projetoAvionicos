@@ -31,7 +31,7 @@
     Function: sound
     Handles the sound alerts thread
 */
-void *sound(void *vargp, ILS status)
+void *sound(void *vargp)
 {
     libvlc_instance_t *inst;
     libvlc_media_player_t *mp;

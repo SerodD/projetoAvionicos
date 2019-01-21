@@ -22,8 +22,8 @@
 
 // Includes --------------------------------------------------------------------
 
-#include "math.h"
 #include "stdint.h"
+#include <math.h>
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
@@ -110,7 +110,6 @@ typedef struct Marker_Beacons {
 typedef struct Message {
     CoordAir APos;
     MB mb;
-    uint32_t CS;
 } message;
 
 // aircraft position
@@ -129,8 +128,6 @@ typedef struct POS {
 typedef struct Aircraft {
     POS pos;
     MB mb;
-    struct timevalue time_msg;
-    char status[STATUS_SIZE];
 } AC;
 
 // airport structure
@@ -159,11 +156,52 @@ typedef struct ILS_STATUS {
 // Global variables-------------------------------------------------------------
 
 struct Inputs inputs;
-int port;
+int port, exiting, receiving;
 char address[STATUS_SIZE];
+AC aircraft;
+ILS status;
 
 // Functions--------------------------------------------------------------------
 
+void *listener(void *vargp);
+AC msg_to_ac(message msg);
+void print_msg(message msg);
+message initialize_msg(message msg);
+int initialize_listener(void);
+POS xyz2llh(POS pos);
+POS llh2xyz(POS pos);
+ENU xyz2enu(POS pos_ac, POS pos_int);
+void delay(unsigned int milliseconds);
+double *get_x_pos_circle(double y, double x_cen, double y_cen, double radius);
+double *get_y_pos_circle(double x, double x_cen, double y_cen, double radius);
+void g2_init (int *vd, int *d);
+void g2_display (int *d);
+void loc_off(int *d);
+void loc_on(int *d);
+void gs_off(int *d);
+void gs_on(int *d);
+void om_on(int* d);
+void om_off(int* d);
+void mm_on(int* d);
+void mm_off(int* d);
+void im_on(int* d);
+void im_off(int* d);
+void update_devs(int *d, ILS status);
+float deg2rad(int a);
+void delay(unsigned int milliseconds);
+float deg2rad(int a);
+double dot_product(double v[], double u[], int n);
+double* subArray(double a[], double b[], int size);
+double array_module(double* array, int size);
+double angle_btw2_vects(double a[], double b[], int size);
+void airport_init(AIRPORT* info);
+void init_rny_planes(RNY_PLANES* planes);
+XYZ project_point_hor(AC info_ac, RNY_PLANES info_rny_planes);
+XYZ project_point_ver(AC info_ac, RNY_PLANES info_rny_planes);
+void aircraft_init_or_upd(MSG message, AC* aircraft);
+int check_lobe(POS tip, POS base, POS aircraft, double height, double radius);
+void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES info_rny);
+void *sound(void *vargp, ILS status);
 
 
 #endif //SAI_GENERAL_H

@@ -17,7 +17,7 @@
     23-01-2019
 ---------------------------------------------------------*/
 
-#include <general.h>
+#include "general.h"
 
 /*
   Function: delay
@@ -84,7 +84,7 @@ double angle_btw2_vects(double a[], double b[], int size) {
 /*
 Initialize airport parameters
 */
-void airport_init(AIRPORT* info;) {
+void airport_init(AIRPORT* info) {
         // Runway Initial Position
 	info->runway_init_pos.lat = LAT_INI;
 	info->runway_init_pos.lon = LON_INI;
