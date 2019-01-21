@@ -159,7 +159,9 @@ typedef struct ILS_STATUS {
 int port, exiting, receiving;
 char address[STATUS_SIZE];
 AC aircraft;
-ILS status;
+ILS info_ils;
+int device;
+int vd;
 
 // Functions--------------------------------------------------------------------
 
@@ -191,7 +193,7 @@ void mm_on(int* d);
 void mm_off(int* d);
 void im_on(int* d);
 void im_off(int* d);
-void update_devs(int *d, ILS status);
+void *update_devs(void *vargp);
 
 // ILS.c
 double dot_product(double v[3], double u[3]);

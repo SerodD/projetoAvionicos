@@ -113,7 +113,9 @@ int check_lobe(POS tip, POS base, POS aircraft, double height, double radius) {
 	//printf("c[i]: %lf %lf %lf \n", c[0], c[1], c[2]);
 
 	double orth_distance = array_module(c, 3);
-	return 1;
+	
+	return 1; // Está sempre a retornar 1
+
 	if(orth_distance >= cone_radius) {
 		return 0;
 	}

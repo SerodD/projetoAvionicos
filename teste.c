@@ -1,4 +1,5 @@
 /************* UDP CLIENT CODE *******************/
+// gcc -g -Wall -std=gnu99 -pedantic -o teste teste.c -lm -lrt -lpthread
 
 #include "general.h"
 

@@ -46,21 +46,21 @@ void *sound(void *vargp)
         // load the engine
         inst = libvlc_new(0, NULL);
 
-        if (status.mb.im == 0 && status.mb.om == 0 && status.mb.mm == 0)
+        if (info_ils.mb.im == 0 && info_ils.mb.om == 0 && info_ils.mb.mm == 0)
         	mb = 0; //alerts won't be played;
         else {
-            if (status.mb.om == 1){
-                strcpy(alert_sound, "Outer VHF Marker Beacon.wav");
+            if (info_ils.mb.om == 1){
+                strcpy(alert_sound, "Outer_VHF_Marker_Beacon.wav");
                 mb = 1;
             // OM on
             }
-            else if (status.mb.mm == 1){
-                strcpy(alert_sound, "Middle VHF Marker Beacon.wav");
+            else if (info_ils.mb.mm == 1){
+                strcpy(alert_sound, "Middle_VHF_Marker_Beacon.wav");
                 mb = 1;
             // MM on
             }
-            else if (status.mb.im == 1){
-                strcpy(alert_sound, "Inner VHF Marker.wav");
+            else if (info_ils.mb.im == 1){
+                strcpy(alert_sound, "Inner_VHF_Marker.wav");
                 mb = 1;
                 // IM on
             }

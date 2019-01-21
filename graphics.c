@@ -316,6 +316,17 @@ void om_off(int* d){
 If aircraft is in MM Marker, it flashes red
 */
 void mm_on(int* d) {
+	g2_pen(*d, g2_ink(*d, 1, 1, 0.5));
+	g2_filled_rectangle(*d, 150, 400, 300, 550);
+
+	g2_pen(*d, 1);	
+	g2_set_line_width(*d, 1);
+	g2_rectangle(*d, 150, 400, 300, 550);
+
+	g2_set_font_size(*d, 100);
+	g2_string(*d, 180, 445, "M");
+	delay(150);
+
 	g2_pen(*d, 19);
 	g2_filled_rectangle(*d, 150, 400, 300, 550);
 
@@ -326,17 +337,6 @@ void mm_on(int* d) {
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 180, 445, "M");
 
-	delay(150);
-
-	g2_pen(*d, g2_ink(*d, 1, 1, 0.5));
-	g2_filled_rectangle(*d, 150, 400, 300, 550);
-
-	g2_pen(*d, 1);	
-	g2_set_line_width(*d, 1);
-	g2_rectangle(*d, 150, 400, 300, 550);
-
-	g2_set_font_size(*d, 100);
-	g2_string(*d, 180, 445, "M");
 	delay(150);
 }
 
@@ -359,6 +359,17 @@ void mm_off(int* d){
 If aircraft is in MM Marker, it flashes red
 */
 void im_on(int* d) {
+	g2_pen(*d, g2_ink(*d, 0.4, 1, 0.6));
+	g2_filled_rectangle(*d, 300, 400, 450, 550);
+
+	g2_pen(*d, 1);	
+	g2_set_line_width(*d, 1);
+	g2_rectangle(*d, 300, 400, 450, 550);
+
+	g2_set_font_size(*d, 100);
+	g2_string(*d, 360, 445, "I");
+	delay(100);
+
 	g2_pen(*d, 0);
 	g2_filled_rectangle(*d, 300, 400, 450, 550);
 
@@ -369,17 +380,6 @@ void im_on(int* d) {
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 360, 445, "I");
 
-	delay(100);
-
-	g2_pen(*d, g2_ink(*d, 0.4, 1, 0.6));
-	g2_filled_rectangle(*d, 300, 400, 450, 550);
-
-	g2_pen(*d, 1);	
-	g2_set_line_width(*d, 1);
-	g2_rectangle(*d, 300, 400, 450, 550);
-
-	g2_set_font_size(*d, 100);
-	g2_string(*d, 360, 445, "I");
 	delay(100);
 }
 
@@ -403,82 +403,110 @@ void im_off(int* d){
   Converts from degrees to radians 
 */
 
-void update_devs(int *d, ILS status) {
-	char s_hor[20], s_ver[20];
-	double* y = malloc(2);
-	double* x = malloc(2);
+void *update_devs(void *vargp) {
 
-	sprintf(s_hor,"%.2f", status.hor_dev);
-	sprintf(s_ver,"%.2f", status.ver_dev);	
 
-	// Update Vertical Panel	
-	g2_pen(*d, 0);
-	g2_filled_rectangle(*d, 75, 250, 375, 290);
+	while(exiting == 0) {
+		char s_hor[20], s_ver[20];
+		double* y = malloc(2);
+		double* x = malloc(2);
 
-	g2_pen(*d, 1);	
-	g2_set_line_width(*d, 1);
-	g2_rectangle(*d, 75, 250, 375, 290);
+		sprintf(s_hor,"%.2f", info_ils.hor_dev);
+		sprintf(s_ver,"%.2f", info_ils.ver_dev);	
 
-	g2_pen(*d, 1);
-	g2_set_font_size(*d, 30);
-	g2_string(*d, 170, 260, s_ver);
+		// Update Vertical Panel	
+		g2_pen(device, 0);
+		g2_filled_rectangle(device, 75, 250, 375, 290);
 
-	// Update Horizontal Panel
-	g2_pen(*d, 0);
-	g2_filled_rectangle(*d, 75, 60, 375, 100);
+		g2_pen(device, 1);	
+		g2_set_line_width(device, 1);
+		g2_rectangle(device, 75, 250, 375, 290);
 
-	g2_pen(*d, 1);	
-	g2_set_line_width(*d, 1);
-	g2_rectangle(*d, 75, 60, 375, 100);
+		g2_pen(device, 1);
+		g2_set_font_size(device, 30);
+		g2_string(device, 170, 260, s_ver);
 
-	g2_pen(*d, 1);
-	g2_set_font_size(*d, 30);
-	g2_string(*d, 170, 70, s_hor);
+		// Update Horizontal Panel
+		g2_pen(device, 0);
+		g2_filled_rectangle(device, 75, 60, 375, 100);
 
-	
-	// Clean display
+		g2_pen(device, 1);	
+		g2_set_line_width(device, 1);
+		g2_rectangle(device, 75, 60, 375, 100);
 
-	g2_pen(*d, 1);	
-	g2_filled_circle(*d, 725, 275, 260);
+		g2_pen(device, 1);
+		g2_set_font_size(device, 30);
+		g2_string(device, 170, 70, s_hor);
 
-	g2_pen(*d, 0);
-	g2_circle(*d, 725, 275, 10);
+		
+		// Clean display
 
-	g2_pen(*d, 0);
-	g2_set_line_width(*d, 1);
-	g2_line(*d, 725, 15, 725, 535);
-	g2_line(*d, 465, 275, 985, 275);
+		g2_pen(device, 1);	
+		g2_filled_circle(device, 725, 275, 260);
 
-	g2_pen(*d, 1);
-	g2_set_line_width(*d, 5);
-	g2_line(*d, 450, 0, 450, 550);
+		g2_pen(device, 0);
+		g2_circle(device, 725, 275, 10);
 
-	g2_pen(*d, 0);
-	g2_set_line_width(*d, 1);
+		g2_pen(device, 0);
+		g2_set_line_width(device, 1);
+		g2_line(device, 725, 15, 725, 535);
+		g2_line(device, 465, 275, 985, 275);
 
-	for(int i = 0; i<=20; i++) {
-		g2_line(*d, 465+i*26, 270, 465+i*26, 280);
-		g2_line(*d, 720, 15+i*26, 730, 15+i*26);	
-	}	
+		g2_pen(device, 1);
+		g2_set_line_width(device, 5);
+		g2_line(device, 450, 0, 450, 550);
 
-	// Update ILS lines
-	g2_pen(*d, 25);
-	g2_set_line_width(*d, 5);
-	if(status.hor_dev >= 20 || status.hor_dev <= -20) {
-		// don't print any line; OUT OF RANGE
+		g2_pen(device, 0);
+		g2_set_line_width(device, 1);
+
+		for(int i = 0; i<=20; i++) {
+			g2_line(device, 465+i*26, 270, 465+i*26, 280);
+			g2_line(device, 720, 15+i*26, 730, 15+i*26);	
+		}	
+
+		// Update ILS lines
+		g2_pen(device, 25);
+		g2_set_line_width(device, 5);
+		if(info_ils.hor_dev >= 20 || info_ils.hor_dev <= -20) {
+			// don't print any line; OUT OF RANGE
+		}
+		else {
+			y = get_y_pos_circle((-info_ils.hor_dev*26)/2 + 725, 725, 275, 260);
+			//printf("X %lf Y_1 %lf  Y_2 %lf\n", -info_ils.hor_dev + 725, y[0], y[1]);
+			g2_line(device, (-info_ils.hor_dev*26)/2 + 725, y[0], (-info_ils.hor_dev*26)/2 + 725, y[1]);
+		}
+
+		if(info_ils.ver_dev >= 10 || info_ils.ver_dev <= -10) {
+			// don't print any line; OUT OF RANGE
+		}
+		else {
+			x = get_x_pos_circle((-info_ils.ver_dev*26)/1 + 275, 725, 275, 260);
+			//printf("Y %lf X_1 %lf  X_2 %lf\n", (-info_ils.ver_dev*26)/2 + 275, x[0], x[1]);
+			g2_line(device, x[0], (-info_ils.ver_dev*26)/1 + 275, x[1], (-info_ils.ver_dev*26)/1 + 275);
+		}
+
+		// Update markers
+		if (info_ils.mb.im == 1) {
+			im_on(&device);
+		}
+		else {
+			im_off(&device);	
+		}
+
+		if (info_ils.mb.om == 1) {
+			om_on(&device);
+		}
+		else {
+			om_off(&device);	
+		}
+
+		if (info_ils.mb.mm == 1) {
+			mm_on(&device);
+		}
+		else {
+			mm_off(&device);	
+		}
 	}
-	else {
-		y = get_y_pos_circle((-status.hor_dev*26)/2 + 725, 725, 275, 260);
-		printf("X %lf Y_1 %lf  Y_2 %lf\n", -status.hor_dev + 725, y[0], y[1]);
-		g2_line(*d, (-status.hor_dev*26)/2 + 725, y[0], (-status.hor_dev*26)/2 + 725, y[1]);
-	}
-
-	if(status.ver_dev >= 10 || status.ver_dev <= -10) {
-		// don't print any line; OUT OF RANGE
-	}
-	else {
-		x = get_x_pos_circle((-status.ver_dev*26)/1 + 275, 725, 275, 260);
-		printf("Y %lf X_1 %lf  X_2 %lf\n", (-status.ver_dev*26)/2 + 275, x[0], x[1]);
-		g2_line(*d, x[0], (-status.ver_dev*26)/1 + 275, x[1], (-status.ver_dev*26)/1 + 275);
-	}
+	sleep(2);
+	return NULL;
 }
