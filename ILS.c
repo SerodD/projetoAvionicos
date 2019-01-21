@@ -86,20 +86,20 @@ Initialize airport parameters
 */
 void airport_init(AIRPORT* info;) {
         // Runway Initial Position
-	info->runway_init_pos.lat = LAT_INI;
+	/*info->runway_init_pos.lat = LAT_INI;
 	info->runway_init_pos.lon = LON_INI;
 	info->runway_init_pos.alt = AIRPORT_ELEVATION;
 	info->runway_init_pos.x = llh2xyz(info->runway_init_pos);
 	info->runway_init_pos.y = llh2xyz(info->runway_init_pos);
-	info->runway_init_pos.z = llh2xyz(info->runway_init_pos);
+	info->runway_init_pos.z = llh2xyz(info->runway_init_pos);*/
 	
 	// Runway Final Position
-	info->runway_final_pos.lat = LAT_FIN;
+	/*info->runway_final_pos.lat = LAT_FIN;
 	info->runway_final_pos.lon = LON_FIN;
 	info->runway_final_pos.alt = AIRPORT_ELEVATION;
 	info->runway_final_pos.x = llh2xyz(info->runway_final_pos);
 	info->runway_final_pos.y = llh2xyz(info->runway_final_pos);
-	info->runway_final_pos.z = llh2xyz(info->runway_final_pos);
+	info->runway_final_pos.z = llh2xyz(info->runway_final_pos);*/
 	
         // Glide Slope Antenna Position
 	info->point_intersection_gs.lat = LAT_GS;
@@ -136,7 +136,7 @@ void airport_init(AIRPORT* info;) {
 	info->glidepath = GLIDE_SLOPE_ANGLE;
 }
 
-void init_rny_planes(RNY_PLANES* planes) {
+/*void init_rny_planes(RNY_PLANES* planes) {
         planes->a_hor = -89272761.686172;
         planes->b_hor = -28151500.462264;
         planes->c_hor = 175459820.6445;
@@ -146,9 +146,9 @@ void init_rny_planes(RNY_PLANES* planes) {
         planes->b_ver = -19815225.036967;
         planes->c_ver = -2280660.921759;
         planes->d_ver = -85523176872;
-}
+}*/
 
-XYZ project_point_hor(AC info_ac, RNY_PLANES info_rny_planes) {
+/*XYZ project_point_hor(AC info_ac, Airport info_rny_planes) {
         XYZ proj;
         double t;
         
@@ -161,7 +161,7 @@ XYZ project_point_hor(AC info_ac, RNY_PLANES info_rny_planes) {
         return proj;    
 }
 
-XYZ project_point_ver(AC info_ac, RNY_PLANES info_rny_planes) {
+XYZ project_point_ver(AC info_ac, Airport info_rny_planes) {
         XYZ proj;
         
         t = -(info_rny_planes.d_ver + info_rny_planes.c_ver * info_ac.pos.z + info_rny_planes.b_ver * info_ac.pos.y + info_rny_planes.a_ver * info_ac.pos.x)/(pow(info_rny_planes.c_ver, 2) + pow(info_rny_planes.b_ver, 2) + pow(info_rny_planes.a_ver, 2));
@@ -171,7 +171,7 @@ XYZ project_point_ver(AC info_ac, RNY_PLANES info_rny_planes) {
         proj.z = info_rny_planes.c_ver * t + info_ac.pos.z;
                
         return proj;     
-}
+}*/
 
 /*
 Initialize or update aircraft parameters
@@ -222,9 +222,9 @@ int check_lobe(POS tip, POS base, POS aircraft, double height, double radius) {
 /*
 Initialize or Update ILS Status
 */
-void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES info_rny) {
+void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils) {
 
-         double rny_centerline[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], [info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], 3);
+         //double rny_centerline[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], [info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], 3);
 	
 	if(info_ac.mb.im == 1) {
 		info_ils->mb.im = 1;
@@ -251,9 +251,9 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES inf
 	if (check_lobe(info_apt.point_intersection_loc, info_apt.point_base_loc, info_ac.pos, LOC_CONE_HEIGHT, LOC_CONE_RADIUS) == 1) {
 	        
 	        
-	        double ac_loc[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], project_point_hor(info_ac, info_rny), 3);
+	        //double ac_loc[] = subArray([info_apt.point_intersection_loc.x, info_apt.point_intersection_loc.y, info_apt.point_intersection_loc.z], project_point_hor(info_ac, info_rny), 3);
 	             
-	        info_ils->hor_dev = angle_btw2_vects(ac_loc, rny_centerline, 3);
+	        info_ils->hor_dev = RUNWAY_DIRECTION - angle_btw2_vects(xyz2enu(info_ac.pos, info_apt.point_intersection_loc), [0 1], 2);
 	        info_ils->LOC_STATUS = 1;
 	}
 	else {
@@ -264,9 +264,9 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES inf
 	// Check if aircraft is inside Glide Slope Lobe
         if (check_lobe(info_apt.point_intersection_gs, info_apt.point_base_gs, info_ac.pos, GS_CONE_HEIGHT, GS_CONE_RADIUS) == 1) {
         
-                double ac_gs[] = subArray([info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], project_point_ver(info_ac, info_rny), 3);
+                //double ac_gs[] = subArray([info_apt.point_intersection_gs.x, info_apt.point_intersection_gs.y, info_apt.point_intersection_gs.z], project_point_ver(info_ac, info_rny), 3);
                 
-                info_ils->ver_dev = angle_btw2_vects(ac_gs, rny_centerline, 3) - GS_ANGLE;
+                info_ils->ver_dev = angle_btw2_vects(xyz2enu(info_ac.pos, info_apt.point_intersection_gs), [0 1 0], 3) - GS_ANGLE;
                 info_ils->GS_STATUS = 1;
         }
 	else {
@@ -274,3 +274,4 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils, RNY_PLANES inf
 	        info_ils->ver_dev = 0;
 	}
 }
+

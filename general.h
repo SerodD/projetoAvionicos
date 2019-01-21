@@ -52,6 +52,7 @@
 // Airport Data
 #define RUNWAY_LENGTH 3805.1232
 #define ELEVATION 100.2792
+#define RUNWAY_DIRECTION 30
 
 // ILS Data
 #define GLIDE_SLOPE_ANGLE 3
@@ -140,7 +141,7 @@ typedef struct Airport_pos {
     POS point_base_gs;
     POS point_base_loc;
     double glidepath;           //[º]
-} Airport;
+} AIRPORT;
 
 typedef struct ENU_pos{
     double e;
