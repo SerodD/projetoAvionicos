@@ -156,7 +156,6 @@ typedef struct ILS_STATUS {
 
 // Global variables-------------------------------------------------------------
 
-struct Inputs inputs;
 int port, exiting, receiving;
 char address[STATUS_SIZE];
 AC aircraft;
