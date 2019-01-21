@@ -25,10 +25,10 @@ int main(){
 
 	/* escrever mensagem a enviar em baixo */
 
-  msg.APos.lat = 1;
-	msg.APos.lon = 3;
-	msg.APos.alt = 8;
-	msg.mb.im = 1;
+  msg.APos.lat = 38.697034;
+	msg.APos.lon = -9.174721;
+	msg.APos.alt = 300;
+	msg.mb.im = 0;
 	msg.mb.om = 1;
 	msg.mb.mm = 0;
   

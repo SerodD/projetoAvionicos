@@ -68,6 +68,20 @@ MSG initialize_msg(MSG msg)
 	return msg;
 }
 
+AC initialize_AC(AC aircraft)
+{
+	aircraft.pos.lat = 0;
+	aircraft.pos.lon = 0;
+	aircraft.pos.alt = 0;
+	aircraft.pos.x = 0;
+	aircraft.pos.y = 0;
+	aircraft.pos.z = 0;
+	aircraft.mb.im = 0;
+	aircraft.mb.om = 0;
+	aircraft.mb.mm = 0;
+
+	return aircraft;
+}
 
 
 /*
@@ -120,21 +134,19 @@ void *listener(void *vargp){
 	MSG msg;
 	msg = initialize_msg(msg);
 
-	// Control variable to guarantee that only one message is being received at a time
-	receiving = 0;
-
 	// Program stays in a cycle until the user presses CTRL+C
 	while(exiting == 0) {
 
-		if(receiving==0) {
+		if(receiving == 0) {
 			receiving = 1;
 			// Receives message
 			addr_size = sizeof(ILS_addr);
 			n = recvfrom(sd, &msg, sizeof(msg) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
+			receiving = 2;
 			printf("\nReceived %d bytes from %s\n", n, inet_ntoa(ILS_addr.sin_addr));
 			if(n<0) {
 				printf("LISTENER: cannot receive data \n");
-				receiving=0;
+				receiving = 0;
 				continue;
 			}
 

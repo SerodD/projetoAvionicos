@@ -194,8 +194,8 @@ void im_off(int* d);
 void update_devs(int *d, ILS status);
 
 // ILS.c
-double dot_product(double v[], double u[], int n);
-double* subArray(double a[], double b[], int size);
+double dot_product(double v[3], double u[3]);
+void subArray(double a[3], double b[3], double* c);
 double array_module(double* array, int size);
 double angle_btw2_vects(double* a, double* b, int size);
 void airport_init(AIRPORT* info);
