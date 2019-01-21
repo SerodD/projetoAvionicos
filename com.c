@@ -86,9 +86,9 @@ void print_msg(message msg)
 	Function: msg_to_ac
 	Stores the data from the messages in the aircraft structure
 */
-AC_t msg_to_ac(message msg)
+AC msg_to_ac(message msg)
 {
-	AC_t ac;
+	AC ac;
 	ac.pos.lat=msg.APos.lat;
 	ac.pos.lon=msg.APos.lon;
 	ac.pos.alt=msg.APos.alt;
@@ -120,7 +120,6 @@ void *listener(void *vargp){
 	message msg;
 	msg = initialize_msg(msg);
 
-	AC_t aircraft;
 	// Control variable to guarantee that only one message is being received at a time
 	receiving = 0;
 
@@ -142,7 +141,7 @@ void *listener(void *vargp){
 
 			// Stores the message data in the aircraft structure
 			aircraft = msg_to_ac(msg);
-
+			print_msg(message msg);
 			receiving=0;
 		}
 
@@ -150,7 +149,6 @@ void *listener(void *vargp){
 	}
 
 
-	free(stream);
 	close(sd);
 	return NULL;
 

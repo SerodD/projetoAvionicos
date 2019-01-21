@@ -21,24 +21,22 @@ int main(){
   /*Initialize size variable to be used later on*/
   addr_size = sizeof serverAddr;
 
-  while(1){
 
-  	message msg;
+	message msg;
 
-  	/* escrever mensagem a enviar em baixo */
+	/* escrever mensagem a enviar em baixo */
 
-  	msg.APos.lat = 0;
-	msg.APos.lon = 0;
-	msg.Apos.alt = 0;
-	msg.mb.im = 0;
-	msg.mb.om = 0;
+  msg.APos.lat = 1;
+	msg.APos.lon = 3;
+	msg.Apos.alt = 8;
+	msg.mb.im = 1;
+	msg.mb.om = 1;
 	msg.mb.mm = 0;
-    
-    /*Send message to server*/
-    sendto(clientSocket,msg,sizeof(message),0,(struct sockaddr *)&serverAddr,addr_size);
+  
+  /*Send message to server*/
+  sendto(clientSocket,msg,sizeof(message),0,(struct sockaddr *)&serverAddr,addr_size);
 
-
-  }
+  close(clientSocket);
 
   return 0;
 }
