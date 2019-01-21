@@ -421,7 +421,7 @@ void update_devs(int *d, ILS status) {
 
 	g2_pen(*d, 1);
 	g2_set_font_size(*d, 30);
-	g2_string(*d, 170, 260, s_hor);
+	g2_string(*d, 170, 260, s_ver);
 
 	// Update Horizontal Panel
 	g2_pen(*d, 0);
@@ -433,7 +433,7 @@ void update_devs(int *d, ILS status) {
 
 	g2_pen(*d, 1);
 	g2_set_font_size(*d, 30);
-	g2_string(*d, 170, 70, s_ver);
+	g2_string(*d, 170, 70, s_hor);
 
 	
 	// Clean display
@@ -468,17 +468,17 @@ void update_devs(int *d, ILS status) {
 		// don't print any line; OUT OF RANGE
 	}
 	else {
-		y = get_y_pos_circle(-status.hor_dev + 725, 725, 275, 260);
-		//printf("X %lf Y_1 %lf  Y_2 %lf\n", -status.hor_dev + 725, y[0], y[1]);
-		g2_line(*d, -status.hor_dev + 725, y[0], -status.hor_dev + 725, y[1]);
+		y = get_y_pos_circle((-status.hor_dev*26)/2 + 725, 725, 275, 260);
+		printf("X %lf Y_1 %lf  Y_2 %lf\n", -status.hor_dev + 725, y[0], y[1]);
+		g2_line(*d, (-status.hor_dev*26)/2 + 725, y[0], (-status.hor_dev*26)/2 + 725, y[1]);
 	}
 
 	if(status.ver_dev >= 10 || status.ver_dev <= -10) {
 		// don't print any line; OUT OF RANGE
 	}
 	else {
-		x = get_x_pos_circle(-status.ver_dev + 275, 725, 275, 260);
-		printf("Y %lf X_1 %lf  X_2 %lf\n", -status.ver_dev + 275, x[0], x[1]);
-		g2_line(*d, x[0], -status.ver_dev + 275, x[1], -status.ver_dev + 275);
+		x = get_x_pos_circle((-status.ver_dev*26)/1 + 275, 725, 275, 260);
+		printf("Y %lf X_1 %lf  X_2 %lf\n", (-status.ver_dev*26)/2 + 275, x[0], x[1]);
+		g2_line(*d, x[0], (-status.ver_dev*26)/1 + 275, x[1], (-status.ver_dev*26)/1 + 275);
 	}
 }
