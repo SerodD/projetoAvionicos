@@ -83,14 +83,10 @@ void g2_display (int *d)
 	//Outer Marker Display	
 	g2_pen(*d, g2_ink(*d, 0.8, 1, 1));
 	g2_filled_rectangle(*d, 0, 400, 150, 550);
-
-	g2_flush(*d);
 	
 	g2_pen(*d, 1);	
 	g2_set_line_width(*d, 1);
 	g2_rectangle(*d, 0, 400, 150, 550); 
-
-	g2_flush(*d);
 
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 45, 445, "O");   
@@ -130,8 +126,6 @@ void g2_display (int *d)
 	g2_set_font_size(*d, 30);
 	g2_string(*d, 77, 320, "Desvio Vertical [Degrees]");
 
-	g2_flush(*d);
-
 	g2_pen(*d, 0);
 	g2_filled_rectangle(*d, 75, 250, 375, 290);
 
@@ -139,14 +133,10 @@ void g2_display (int *d)
 	g2_set_line_width(*d, 1);
 	g2_rectangle(*d, 75, 250, 375, 290);
 
-	g2_flush(*d);
-
 	// Desvio Horizontal
 
 	g2_set_font_size(*d, 30);
 	g2_string(*d, 60, 130, "Desvio Horizontal [Degrees]");
-
-	g2_flush(*d);
 
 	g2_pen(*d, 0);
 	g2_filled_rectangle(*d, 75, 60, 375, 100);
@@ -154,8 +144,6 @@ void g2_display (int *d)
 	g2_pen(*d, 1);	
 	g2_set_line_width(*d, 1);
 	g2_rectangle(*d, 75, 60, 375, 100);
-
-	g2_flush(*d);
 
 	// ILS display
 
@@ -285,7 +273,7 @@ void om_on(int* d) {
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 45, 445, "O");
 
-	delay(200);
+	delay(10);
 
 	g2_pen(*d, 3);
 	g2_filled_rectangle(*d, 0, 400, 150, 550);
@@ -296,7 +284,7 @@ void om_on(int* d) {
 		
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 45, 445, "O");
-	delay(200);
+	delay(10);
 }
 
 //After passing by OM, the lighter turns back to the normal color
@@ -325,7 +313,7 @@ void mm_on(int* d) {
 
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 180, 445, "M");
-	delay(150);
+	delay(10);
 
 	g2_pen(*d, 19);
 	g2_filled_rectangle(*d, 150, 400, 300, 550);
@@ -337,7 +325,7 @@ void mm_on(int* d) {
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 180, 445, "M");
 
-	delay(150);
+	delay(10);
 }
 
 /*
@@ -368,7 +356,7 @@ void im_on(int* d) {
 
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 360, 445, "I");
-	delay(100);
+	delay(10);
 
 	g2_pen(*d, 0);
 	g2_filled_rectangle(*d, 300, 400, 450, 550);
@@ -380,7 +368,7 @@ void im_on(int* d) {
 	g2_set_font_size(*d, 100);
 	g2_string(*d, 360, 445, "I");
 
-	delay(100);
+	delay(10);
 }
 
 /*
@@ -521,7 +509,10 @@ void *update_devs(void *vargp) {
 		else {
 			gs_off(&device);
 		}
+
+		g2_flush(device);
 	}
-	sleep(2);
+
+	
 	return NULL;
 }

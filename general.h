@@ -73,11 +73,13 @@
 #define HEIGHT_LOC_CONE 47014.2521303
 #define RADIUS_LOC_CONE 8289.8811284
 
+#define Error_Deviation 4
+
 #define CHECK_SUM 32
 
 //Communications constants
-#define B_PORT 8100
-#define B_ADDRESS "127.0.0.1"
+#define B_PORT 10000
+#define B_ADDRESS "192.168.137.104"
 
 #define STATUS_SIZE 30
 

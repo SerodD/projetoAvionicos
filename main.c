@@ -67,7 +67,6 @@ int main(int argc, char const *argv[])
 		printf("om: %d mm: %d im: %d\n",info_ils.mb.om,info_ils.mb.mm,info_ils.mb.im);
 		printf("Hor_dev: %lf Ver_dev: %lf\n",info_ils.hor_dev,info_ils.ver_dev);
 		printf("LOC_STATUS: %d GS_STATUS: %d\n",info_ils.LOC_STATUS,info_ils.GS_STATUS);
-		sleep(2);
 
 	}
 

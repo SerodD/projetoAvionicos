@@ -226,7 +226,7 @@ void init_or_upd_ils(AIRPORT info_apt, AC info_ac, ILS* info_ils) {
 	
 	// Check if the aircraft is inside Localizer Lobe
 	if (check_lobe_loc == 1) {
-	        info_ils->hor_dev = angle_hor;
+	        info_ils->hor_dev = angle_hor - Error_Deviation;
 	        info_ils->LOC_STATUS = 1;
 	}
 	else {
