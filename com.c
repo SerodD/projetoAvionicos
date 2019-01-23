@@ -85,8 +85,8 @@ MSG string_to_msg(char buff[100], MSG msg)
 		i++;
 	}
 
-	msg.APos.lat = vec[0];
-	msg.APos.lon = vec[1];
+	msg.APos.lat = vec[0]*PI/180;
+	msg.APos.lon = vec[1]*PI/180;
 	msg.APos.alt = vec[2];
 	msg.mb.im = (int)vec[9];
 	msg.mb.mm = (int)vec[10];
