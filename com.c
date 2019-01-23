@@ -68,6 +68,34 @@ MSG initialize_msg(MSG msg)
 	return msg;
 }
 
+MSG string_to_msg(char buff[100], MSG msg)
+{
+	char *ch;
+	char temp[20];
+	double vec[12];
+	int i = 0;
+
+	ch = strtok(buff,",");
+
+	while (ch != NULL){
+		strcpy(temp, ch);
+		sscanf(temp, "%lf", &(vec[i]));
+		//printf("%s\n", temp);
+		ch = strtok(NULL, ",");
+		i++;
+	}
+
+	msg.APos.lat = vec[0];
+	msg.APos.lon = vec[1];
+	msg.APos.alt = vec[2];
+	msg.mb.im = (int)vec[9];
+	msg.mb.mm = (int)vec[10];
+	msg.mb.om = (int)vec[11];
+
+	return msg;
+}
+
+
 AC initialize_AC(AC aircraft)
 {
 	aircraft.pos.lat = 0;
@@ -103,9 +131,9 @@ void print_msg(MSG msg)
 AC msg_to_ac(MSG msg)
 {
 	AC ac;
-	ac.pos.lat=msg.APos.lat;
-	ac.pos.lon=msg.APos.lon;
-	ac.pos.alt=msg.APos.alt;
+	ac.pos.lat = msg.APos.lat;
+	ac.pos.lon = msg.APos.lon;
+	ac.pos.alt = msg.APos.alt;
 	ac.pos = llh2xyz(ac.pos);
 	ac.mb.im = msg.mb.im;
 	ac.mb.om = msg.mb.om;
@@ -127,6 +155,7 @@ void *listener(void *vargp){
 	int sd = initialize_listener();
 
 	int n;
+	char buff[100];
 	struct sockaddr_in ILS_addr;
 	socklen_t  addr_size;
 
@@ -141,9 +170,11 @@ void *listener(void *vargp){
 			receiving = 1;
 			// Receives message
 			addr_size = sizeof(ILS_addr);
-			n = recvfrom(sd, &msg, sizeof(msg) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
+			n = recvfrom(sd, &buff, (sizeof(char)*100) , 0, (struct sockaddr *) &ILS_addr, &addr_size);
 			receiving = 2;
 			printf("\nReceived %d bytes from %s\n", n, inet_ntoa(ILS_addr.sin_addr));
+
+			msg = string_to_msg(buff, msg);
 			if(n<0) {
 				printf("LISTENER: cannot receive data \n");
 				receiving = 0;
@@ -152,8 +183,8 @@ void *listener(void *vargp){
 
 
 			// Stores the message data in the aircraft structure
-			aircraft = msg_to_ac(msg);
 			print_msg(msg);
+			aircraft = msg_to_ac(msg);
 			receiving = 0;
 		}
 
