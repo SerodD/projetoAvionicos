@@ -42,13 +42,6 @@ int main(int argc, char const *argv[])
 	//Create threads to run different functions in parallel
 	pthread_t thread_listener, thread_sound, thread_g2;
 	pthread_create(&thread_listener, NULL, listener, NULL);
-	pthread_create(&thread_sound, NULL, sound, NULL);
-	pthread_create(&thread_g2, NULL, update_devs, NULL);
-	
-	
-	/*printf("lat: %lf long: %lf alt: %lf\n", airport.point_intersection_gs.lat, airport.point_intersection_gs.lon,airport.point_intersection_gs.alt);
-	printf("x: %lf y: %lf z: %lf\n",airport.point_intersection_gs.x, airport.point_intersection_gs.y, airport.point_intersection_gs.z);
-	printf("GP: %lf\n",airport.glidepath);*/
 	while(1){
 		printf("a espera\n");
 		if (receiving == 2)
@@ -56,6 +49,13 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	}
+	pthread_create(&thread_sound, NULL, sound, NULL);
+	pthread_create(&thread_g2, NULL, update_devs, NULL);
+	
+	
+	/*printf("lat: %lf long: %lf alt: %lf\n", airport.point_intersection_gs.lat, airport.point_intersection_gs.lon,airport.point_intersection_gs.alt);
+	printf("x: %lf y: %lf z: %lf\n",airport.point_intersection_gs.x, airport.point_intersection_gs.y, airport.point_intersection_gs.z);
+	printf("GP: %lf\n",airport.glidepath);*/
 
 	while(exiting == 0){
 		/*printf("lat: %lf long: %lf alt: %lf\n",aircraft.pos.lat, aircraft.pos.lon,aircraft.pos.alt);

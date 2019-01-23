@@ -52,26 +52,26 @@
 // Airport Data
 #define RUNWAY_LENGTH 3805.1232
 #define ELEVATION 100.2792
-#define RUNWAY_DIRECTION 30
+#define RUNWAY_DIRECTION 0.471238898038 // Runway 03, 27º in radians
 
 // ILS Data
-#define GLIDE_SLOPE_ANGLE 3
-#define LAT_GS 38.766598
-#define LON_GS -9.143808
-#define LAT_LOC 38.797061
-#define LON_LOC -9.127527
+#define GLIDE_SLOPE_ANGLE 0.060441582629//3.46304759174
+#define LAT_GS 0.676652003505//38.769304
+#define LON_GS -0.1595642834//-9.142360
+#define LAT_LOC 0.677185027058//38.799844
+#define LON_LOC -0.15927951548//-9.126044
 
-#define LAT_GS_BASE 38.609772
-#define LON_GS_BASE -9.226533
+#define LAT_GS_BASE 0.673867644843//38.609772
+#define LON_GS_BASE -0.16103337939//-9.226533
 #define HEIGHT_GS_BASE 1070.87127232
-#define HEIGHT_GS_CONE 18494.6189837
-#define RADIUS_GS_CONE 1298.56670962
+#define HEIGHT_GS_CONE 18545.4158479
+#define RADIUS_GS_CONE 777.283221757
 
-#define LAT_LOC_BASE 38.408865
-#define LON_LOC_BASE -9.322040
+#define LAT_LOC_BASE 0.670361156202//38.408865
+#define LON_LOC_BASE -0.162700291//-9.322040
 #define HEIGHT_LOC_BASE 8264.2184068
-#define HEIGHT_LOC_CONE 45596.5989646
-#define RADIUS_LOC_CONE 8039.91062598 
+#define HEIGHT_LOC_CONE 47014.2521303
+#define RADIUS_LOC_CONE 8289.8811284
 
 #define CHECK_SUM 32
 
@@ -175,7 +175,7 @@ int initialize_listener(void);
 //coord.c
 POS xyz2llh(POS pos);
 POS llh2xyz(POS pos);
-ENU xyz2enu(POS pos_ac, POS pos_int);
+ENU xyz2enu(POS pos_ac, POS pos_radar);
 
 //graphics.c
 void delay(unsigned int milliseconds);
@@ -196,10 +196,11 @@ void im_off(int* d);
 void *update_devs(void *vargp);
 
 // ILS.c
-double dot_product(double v[3], double u[3]);
+double rad2deg(double rad);
+double dot_product(double v[3], double u[3], int size);
 void subArray(double a[3], double b[3], double* c);
 double array_module(double* array, int size);
-double angle_btw2_vects(double* a, double* b, int size);
+double angle_btw2_vects(double* a, double* b);
 void airport_init(AIRPORT* info);
 void aircraft_init_or_upd(MSG message, AC* aircraft);
 int check_lobe(POS tip, POS base, POS aircraft, double height, double radius);

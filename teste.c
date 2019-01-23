@@ -4,7 +4,7 @@
 #include "general.h"
 
 
-int main(){
+int main() {
   int clientSocket;
   struct sockaddr_in serverAddr;
   socklen_t addr_size;
@@ -21,17 +21,16 @@ int main(){
   /*Initialize size variable to be used later on*/
   addr_size = sizeof serverAddr;
 
+  MSG msg;
 
-	MSG msg;
+  /* escrever mensagem a enviar em baixo */
 
-	/* escrever mensagem a enviar em baixo */
-
-  msg.APos.lat = 38.697034;
-	msg.APos.lon = -9.174721;
-	msg.APos.alt = 300;
-	msg.mb.im = 0;
-	msg.mb.om = 1;
-	msg.mb.mm = 0;
+  msg.APos.lat = (38.755616*PI)/180;
+  msg.APos.lon = (-9.148965*PI)/180;
+  msg.APos.alt = ELEVATION - 100;
+  msg.mb.im = 1;
+  msg.mb.om = 0;
+  msg.mb.mm = 0;
   
   /*Send message to server*/
   sendto(clientSocket,&msg,sizeof(MSG),0,(struct sockaddr *)&serverAddr,addr_size);

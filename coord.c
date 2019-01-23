@@ -41,21 +41,22 @@ POS xyz2llh(POS pos)
   pos.lat = atan2(pos.z+e2l*b*pow(sin(beta),3), p-e2*a*pow(cos(beta),3));
 
   // longitude
-  if (pos.y >= 0)
+  if (pos.y >= 0) {
     pos.lon = PI/2 - 2*atan2(pos.x, (sqrt(pow(pos.x,2)+pow(pos.y,2))+pos.y));
-  else
+  }
+  else {
     pos.lon = -PI/2 + 2*atan2(pos.x, (sqrt(pow(pos.x,2)+pow(pos.y,2))-pos.y));
+  }
 
+  if(pos.lat<-PI/2)
+    pos.lat=-PI-pos.lat;
+  if(pos.lat>PI/2)
+    pos.lat=PI-pos.lat;
 
-  if(pos.lat<-90)
-    pos.lat=-180-pos.lat;
-  if(pos.lat>90)
-    pos.lat=180-pos.lat;
-
-  if(pos.lon<-180)
-    pos.lon=pos.lon+360;
-  if(pos.lon>180)
-    pos.lon=pos.lon-360;
+  if(pos.lon<-PI)
+    pos.lon=pos.lon+2*PI;
+  if(pos.lon>PI)
+    pos.lon=pos.lon-2*PI;
 
   // altitude
   double RN = a/(sqrt(1-f*(2-f)*pow(sin(pos.lat),2)));
@@ -89,15 +90,21 @@ POS llh2xyz(POS pos)
   Function: xyz2enu
   Converts positions in WGS84 XYZ into ENU
 */
-ENU xyz2enu(POS pos_ac, POS pos_int)
+ENU xyz2enu(POS pos_ac, POS pos_radar)
 {
     // WGS84 constants
 
     ENU enu;
 
-    double x = pos_int.x-pos_ac.x;
-    double y = pos_int.y-pos_ac.y;
-    double z = pos_int.z-pos_ac.z;
+    /*printf("*************AC - radar *************\n");
+    printf("X %lf, Y %lf, Z %lf\n", pos_ac.x, pos_ac.y, pos_ac.z);
+    printf("X %lf, Y %lf, Z %lf\n\n", pos_radar.x, pos_radar.y, pos_radar.z);
+    printf("Lat %lf, Lon %lf, Alt %lf\n", pos_ac.lat, pos_ac.lon, pos_ac.alt);
+    printf("Lat %lf, Lon %lf, Alt %lf\n\n", pos_radar.lat, pos_radar.lon, pos_radar.alt);*/
+
+    double x = pos_radar.x-pos_ac.x;
+    double y = pos_radar.y-pos_ac.y;
+    double z = pos_radar.z-pos_ac.z;
     double x1, y1, z1;
 
     //multiplication by z-rot matrix

@@ -506,6 +506,21 @@ void *update_devs(void *vargp) {
 		else {
 			mm_off(&device);	
 		}
+
+		// Update LOC and GS Status
+		if (info_ils.LOC_STATUS == 1) {
+			loc_on(&device);
+		}
+		else {
+			loc_off(&device);
+		}
+		
+		if (info_ils.GS_STATUS == 1) {
+			gs_on(&device);
+		}
+		else {
+			gs_off(&device);
+		}
 	}
 	sleep(2);
 	return NULL;
