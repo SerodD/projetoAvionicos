@@ -120,7 +120,7 @@ void print_msg(MSG msg)
 {
 	printf("\n*-------Message-------*\n");
 	printf("AP: %f %f %f\n", msg.APos.lat, msg.APos.lon, msg.APos.alt);
-	printf("AV: %d %d %d\n", msg.mb.im, msg.mb.om, msg.mb.mm);
+	printf("AV: %d %d %d\n", msg.mb.im, msg.mb.mm, msg.mb.om);
 	printf("\n");
 }
 

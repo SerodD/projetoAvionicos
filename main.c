@@ -42,6 +42,7 @@ int main(int argc, char const *argv[])
 	//Create threads to run different functions in parallel
 	pthread_t thread_listener, thread_sound, thread_g2;
 	pthread_create(&thread_listener, NULL, listener, NULL);
+	
 	while(1){
 		printf("a espera\n");
 		if (receiving == 2)
@@ -49,6 +50,7 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	}
+
 	pthread_create(&thread_sound, NULL, sound, NULL);
 	pthread_create(&thread_g2, NULL, update_devs, NULL);
 	
